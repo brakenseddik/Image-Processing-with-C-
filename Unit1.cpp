@@ -1,0 +1,102 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+if(OpenPictureDialog1->Execute()){
+Image1->Picture->LoadFromFile(OpenPictureDialog1->FileName);
+}         
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+int i,w,h,s=300;
+float a,b;
+w=Image1->Picture->Width;
+h=Image1->Picture->Height;
+           int hist[256];
+ for(int hi=0;hi<256;hi++)
+   {
+    hist[hi]=0;
+   }
+
+ for(i=0;i<w;i++)
+   {
+    for(int j=0;j<h;j++)
+      {
+      int ng =GetRValue(Image1->Canvas->Pixels[i][j]);
+       hist[ng]++;
+      }
+   }
+
+for ( i=0; i<256 && hist[i]<s;i++) ;
+ a=i;
+
+
+for (i=255; i>0 && hist[i]<s;)i-- ;
+b=i;
+
+int f,ng;
+
+    for(int index_i=0;index_i<=w;index_i++)
+   {
+    for(int index_j=0;index_j<=h;index_j++)
+      {
+      ng= GetRValue(Image1->Canvas->Pixels[index_i][index_j]);
+
+       int C=255*(ng-a)/(b-a);
+       if (C<0) C=0;
+       if (C>255) C=255;
+       Image2->Canvas->Pixels[index_i][index_j]=(TColor)RGB(C,C,C);
+      }
+   }
+   Image2->Width=w;
+ Image2->Height=h;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+int w=Image1->Picture->Width;
+ int h=Image1->Picture->Height;
+
+
+ int i,j,hi,
+ hist[256];
+
+ Chart1->Series[0]->Clear();
+
+
+ for(hi=0;hi<256;hi++)
+   {
+    hist[hi]=0;
+   }
+
+ for(i=0;i<w;i++)
+   {
+    for(j=0;j<h;j++)
+      {
+      int ng =GetRValue(Image1->Canvas->Pixels[i][j]);
+       hist[ng]++;
+      }
+   }
+ for(int hi=0;hi<256;hi++)
+    {
+     Chart1->Series[0]->AddXY(hi,hist[hi],hi,clBlack);
+    }
+}
+//---------------------------------------------------------------------------

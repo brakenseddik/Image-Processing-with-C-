@@ -1,0 +1,133 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+   Image1->Picture->LoadFromFile(OpenPictureDialog1->FileName)  ;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+if   (SavePictureDialog1->Execute()){
+Image1->Picture->Bitmap->SaveToFile(SavePictureDialog1->FileName);
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::NGClick(TObject *Sender)
+{
+int w= Image1->Picture->Width;
+int h= Image1->Picture->Height;
+
+Image2->Width=w;
+Image2->Height=h;
+
+for(int i=0;i<w;i++)
+      for(int j=0;j<h;j++){
+
+        int r=GetRValue(Image1->Canvas->Pixels[i][j]);
+        int g=GetGValue(Image1->Canvas->Pixels[i][j]);
+        int b=GetBValue(Image1->Canvas->Pixels[i][j]);
+
+int ng=(r+g+b)/3;
+  Image2->Canvas->Pixels[i][j]=(TColor)RGB(ng,ng,ng);
+}
+
+
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::changerClick(TObject *Sender)
+{
+ int w= Image2->Picture->Width;
+int h= Image2->Picture->Height;
+
+Image3->Width=w;
+Image3->Height=h;
+
+for(int i=0;i<w;i++)
+      for(int j=0;j<h;j++){
+
+        int r=GetRValue(Image2->Canvas->Pixels[i][j]);
+
+
+int ng= r/32  ;
+int x=ng*32;
+  Image3->Canvas->Pixels[i][j]=(TColor)RGB(x,x,x);
+}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+ int w= Image1->Picture->Width;
+int h= Image1->Picture->Height;
+
+Image4->Width=w;
+Image4->Height=h;
+
+for(int i=0;i<w;i++)
+      for(int j=0;j<h;j++){
+
+        int r=GetRValue(Image1->Canvas->Pixels[i][j]);
+
+
+if(r<127){Image4->Canvas->Pixels[i][j]=(TColor)RGB(0,0,0);}
+else {Image4->Canvas->Pixels[i][j]=(TColor)RGB(255,255,255);}
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+int w= Image1->Picture->Width;
+int h= Image1->Picture->Height;
+
+Image5->Width=w;
+Image5->Height=h;
+
+for(int i=0;i<w;i++)
+for(int j=0;j<h;j++)
+            Image5->Canvas->Pixels[h-j-1][j]=Image1->Canvas->Pixels[i][j];
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+int w=Image1->Picture->Width;
+int h=Image1->Picture->Height;
+Image2->Width=w;
+Image2->Height=h;
+
+for(int i=0;i<w;i++){
+for(int j=0;j<h;j++){
+Image5->Canvas->Pixels[h-j-1][i]=Image1->Canvas->Pixels[i][j];
+}
+}
+
+}
+
+
+
+//---------------------------------------------------------------------------
+
